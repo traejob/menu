@@ -11,193 +11,21 @@
       box-sizing: border-box;
     }
 
-    body {
-      background: #000;
-      font-family: Arial, sans-serif;
-      overflow-x: hidden;
-    }
-
-    .container {
+    html, body {
       width: 100%;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      height: 100%;
+      overflow: hidden;
     }
 
-    .pdf-container {
-      width: 100%;
-      height: 100vh;
-      position: relative;
-      background: #000;
-    }
-
-    .pdf-viewer {
+    iframe {
       width: 100%;
       height: 100%;
       border: none;
-      background: #000;
-    }
-
-    /* 隐藏PDF工具栏的样式 */
-    .pdf-viewer {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-    }
-
-    /* 全屏模式样式 */
-    .fullscreen-pdf {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 9999;
-      background: #000;
-    }
-
-    /* 控制按钮 */
-    .controls {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 10000;
-      display: flex;
-      gap: 10px;
-    }
-
-    .control-btn {
-      padding: 8px 12px;
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 12px;
-      transition: background 0.3s;
-    }
-
-    .control-btn:hover {
-      background: rgba(0, 0, 0, 0.9);
-    }
-
-    .download-link {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 10px 16px;
-      background: rgba(0, 123, 255, 0.9);
-      color: white;
-      text-decoration: none;
-      border-radius: 6px;
-      font-size: 14px;
-      font-weight: bold;
-      transition: background 0.3s;
-      z-index: 10000;
-    }
-
-    .download-link:hover {
-      background: rgba(0, 86, 179, 0.9);
-    }
-
-    /* 移动端优化 */
-    @media (max-width: 768px) {
-      .controls {
-        top: 10px;
-        right: 10px;
-      }
-      
-      .download-link {
-        bottom: 10px;
-        right: 10px;
-        padding: 8px 12px;
-        font-size: 12px;
-      }
-    }
-
-    /* 隐藏滚动条但保持滚动功能 */
-    ::-webkit-scrollbar {
-      display: none;
-    }
-    
-    html {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
+      display: block;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- 控制按钮 -->
-    <div class="controls">
-      <button class="control-btn" onclick="toggleFullscreen()">🔍 全屏</button>
-      <button class="control-btn" onclick="resetView()">🔄 重置</button>
-    </div>
-
-    <!-- PDF 查看器 -->
-    <div class="pdf-container" id="pdfContainer">
-      <iframe 
-        src="menu nuevo.pdf#toolbar=0&navpanes=0&scrollbar=0&statusbar=0&messages=0&scrollbar=0" 
-        class="pdf-viewer" 
-        id="pdfViewer"
-        frameborder="0"
-        scrolling="no">
-        <!-- 备用内容 -->
-        <div style="display: flex; align-items: center; justify-content: center; height: 100vh; background: #f5f5f5; flex-direction: column;">
-          <h3 style="color: #333; margin-bottom: 20px;">无法显示PDF文件</h3>
-          <p style="color: #666; margin-bottom: 30px;">您的浏览器可能不支持PDF预览</p>
-          <a href="menu nuevo.pdf" style="padding: 12px 24px; background: #007bff; color: white; text-decoration: none; border-radius: 6px;">下载查看菜单</a>
-        </div>
-      </iframe>
-    </div>
-
-    <!-- 下载链接 -->
-    <a href="menu nuevo.pdf" class="download-link" download>
-      📄 下载
-    </a>
-  </div>
-
-  <script>
-    function toggleFullscreen() {
-      const container = document.getElementById('pdfContainer');
-      const viewer = document.getElementById('pdfViewer');
-      
-      if (!document.fullscreenElement) {
-        container.requestFullscreen().catch(err => {
-          console.log('无法进入全屏模式:', err);
-        });
-      } else {
-        document.exitFullscreen();
-      }
-    }
-
-    function resetView() {
-      if (document.fullscreenElement) {
-        document.exitFullscreen();
-      }
-      // 重新加载PDF
-      const viewer = document.getElementById('pdfViewer');
-      viewer.src = viewer.src;
-    }
-
-    // 键盘快捷键
-    document.addEventListener('keydown', function(e) {
-      if (e.key === 'f' || e.key === 'F') {
-        toggleFullscreen();
-      } else if (e.key === 'Escape') {
-        if (document.fullscreenElement) {
-          document.exitFullscreen();
-        }
-      } else if (e.key === 'r' || e.key === 'R') {
-        resetView();
-      }
-    });
-
-    // 防止右键菜单（可选）
-    document.addEventListener('contextmenu', function(e) {
-      e.preventDefault();
-    });
-  </script>
+  <iframe src="menu nuevo.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
 </body>
 </html>
