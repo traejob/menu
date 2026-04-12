@@ -11,21 +11,50 @@
       box-sizing: border-box;
     }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
+    body {
+      background: #000;
     }
 
-    iframe {
+    canvas {
       width: 100%;
-      height: 100%;
-      border: none;
+      height: auto;
       display: block;
     }
   </style>
 </head>
 <body>
-  <iframe src="menu nuevo.pdf#toolbar=0&navpanes=0&scrollbar=0"></iframe>
+  <div id="pdf-container"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    const url = 'menu nuevo.pdf';
+    const container = document.getElementById('pdf-container');
+
+    pdfjsLib.getDocument(url).promise.then(function(pdf) {
+      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        pdf.getPage(pageNum).then(function(page) {
+          const viewport = page.getViewport({ scale: window.devicePixelRatio * (window.innerWidth / page.getViewport({ scale: 1 }).width) });
+
+          const canvas = document.createElement('canvas');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          canvas.dataset.page = page.pageNumber;
+          container.appendChild(canvas);
+
+          // 按页码排序插入
+          const canvases = container.querySelectorAll('canvas');
+          const sorted = Array.from(canvases).sort((a, b) => a.dataset.page - b.dataset.page);
+          sorted.forEach(c => container.appendChild(c));
+
+          page.render({
+            canvasContext: canvas.getContext('2d'),
+            viewport: viewport
+          });
+        });
+      }
+    });
+  </script>
 </body>
 </html>
